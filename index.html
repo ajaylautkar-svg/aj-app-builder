@@ -3,29 +3,34 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>AJ App Builder</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 body{
   margin:0;
   font-family:Arial,sans-serif;
-  background:#f2f5f9;
+  background:#eef2f7;
   color:#222;
 }
 
 header{
-  background:#1976d2;
+  background:#111827;
   color:white;
   padding:22px 15px;
   text-align:center;
 }
 
-header h1{margin:0 0 7px}
+header h1{
+  margin:0 0 7px;
+}
 
 .container{
-  max-width:900px;
+  max-width:950px;
   margin:auto;
   padding:15px;
 }
@@ -34,69 +39,117 @@ header h1{margin:0 0 7px}
   background:white;
   padding:18px;
   margin:15px 0;
-  border-radius:14px;
-  box-shadow:0 3px 12px rgba(0,0,0,.08);
+  border-radius:16px;
+  box-shadow:0 4px 15px rgba(0,0,0,.08);
 }
 
 input,select,button{
   width:100%;
   padding:12px;
   margin:7px 0;
-  border-radius:8px;
+  border-radius:9px;
   border:1px solid #ccc;
   font-size:16px;
 }
 
 button{
-  background:#1976d2;
+  background:#2563eb;
   color:white;
-  border:none;
+  border:0;
   cursor:pointer;
 }
 
 .delete{
-  background:#d32f2f;
+  background:#dc2626;
 }
 
 .element{
-  background:#f5f5f5;
+  background:#f3f4f6;
   padding:12px;
   margin-top:8px;
-  border-radius:8px;
+  border-radius:9px;
 }
 
-.preview{
-  border:2px solid #ddd;
-  border-radius:15px;
-  overflow:hidden;
+.builder{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:20px;
+}
+
+.phone-area{
+  display:flex;
+  justify-content:center;
+}
+
+.phone{
+  width:320px;
+  max-width:100%;
+  background:#111;
+  padding:10px;
+  border-radius:35px;
+  box-shadow:0 8px 30px rgba(0,0,0,.25);
+}
+
+.phone-screen{
   background:white;
+  border-radius:27px;
+  overflow:hidden;
+  min-height:560px;
+  position:relative;
 }
 
-.preview-header{
-  padding:18px;
+.app-header{
   color:white;
+  padding:18px 12px;
   text-align:center;
 }
 
-.preview-body{
-  padding:20px;
-  min-height:250px;
+.app-header h2{
+  margin:0;
+}
+
+.app-content{
+  padding:18px;
+  min-height:440px;
+}
+
+.app-page-button{
+  width:100%;
+  background:#f1f5f9;
+  color:#222;
+  margin:5px 0;
 }
 
 .preview-button{
   display:block;
+  width:100%;
   padding:12px;
-  margin:15px 0;
-  border-radius:8px;
+  margin:12px 0;
+  border-radius:9px;
   color:white;
-  text-align:center;
   text-decoration:none;
+  text-align:center;
 }
 
 .preview-image{
-  max-width:100%;
+  width:100%;
+  max-height:200px;
+  object-fit:cover;
   border-radius:10px;
-  margin-top:10px;
+  margin:8px 0;
+}
+
+.home-text{
+  color:#666;
+  text-align:center;
+  margin-bottom:20px;
+}
+
+@media(min-width:750px){
+  .builder{
+    grid-template-columns:1fr 1fr;
+    align-items:start;
+  }
 }
 </style>
 </head>
@@ -105,10 +158,16 @@ button{
 
 <header>
 <h1>🚀 AJ App Builder</h1>
-<p>अपनी खुद की App आसानी से बनाएं</p>
+<p>अपनी खुद की Mobile App बनाएं</p>
 </header>
 
 <div class="container">
+
+<div class="builder">
+
+<!-- SETTINGS -->
+
+<div>
 
 <div class="card">
 
@@ -125,85 +184,69 @@ oninput="updatePreview()"
 
 <label>Theme Color</label>
 
-<select id="themeColor" onchange="updatePreview()">
-<option value="#1976d2">Blue</option>
-<option value="#2e7d32">Green</option>
-<option value="#7b1fa2">Purple</option>
-<option value="#ef6c00">Orange</option>
-<option value="#c62828">Red</option>
+<select
+id="themeColor"
+onchange="updatePreview()"
+>
+
+<option value="#2563eb">Blue</option>
+<option value="#16a34a">Green</option>
+<option value="#9333ea">Purple</option>
+<option value="#ea580c">Orange</option>
+<option value="#dc2626">Red</option>
+
 </select>
 
 </div>
 
 
+<!-- PAGES -->
+
 <div class="card">
 
-<h2>📄 App Pages</h2>
+<h2>📄 Pages</h2>
 
 <input
 id="pageName"
 type="text"
-placeholder="Page का नाम जैसे Home"
+placeholder="Home, About, Contact..."
 >
 
-<button onclick="addPage()">➕ Add Page</button>
+<button onclick="addPage()">
+➕ Add Page
+</button>
 
 <div id="pagesList"></div>
 
 </div>
 
 
+<!-- ELEMENTS -->
+
 <div class="card">
 
-<h2>🧩 Add Elements</h2>
+<h2>🧩 Elements</h2>
 
-<button onclick="addText()">📝 Add Text</button>
+<button onclick="addText()">
+📝 Add Text
+</button>
 
-<button onclick="addButton()">🔘 Add Button</button>
+<button onclick="addButton()">
+🔘 Add Button
+</button>
 
-<button onclick="addImage()">🖼️ Add Image</button>
+<button onclick="addImage()">
+🖼️ Add Image
+</button>
 
 <div id="elementsList"></div>
 
 </div>
 
 
-<div class="card">
-
-<h2>👀 Live Preview</h2>
-
-<div class="preview">
-
-<div
-class="preview-header"
-id="previewHeader"
->
-
-<h2 id="previewTitle">
-My App
-</h2>
-
-</div>
-
-<div
-class="preview-body"
-id="previewBody"
->
-
-<p>
-आपकी App का Preview यहाँ दिखाई देगा।
-</p>
-
-</div>
-
-</div>
-
-</div>
-
+<!-- SAVE -->
 
 <div class="card">
-
-<h2>💾 Save</h2>
 
 <button onclick="saveApp()">
 💾 Save App
@@ -221,6 +264,53 @@ onclick="clearApp()"
 </div>
 
 
+<!-- MOBILE PREVIEW -->
+
+<div>
+
+<div class="card">
+
+<h2>👀 Mobile Preview</h2>
+
+<div class="phone">
+
+<div class="phone-screen">
+
+<div
+class="app-header"
+id="appHeader"
+>
+
+<h2 id="previewTitle">
+My App
+</h2>
+
+</div>
+
+<div
+class="app-content"
+id="appContent"
+>
+
+<div class="home-text">
+Welcome to your App
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
 <script>
 
 let pages=[];
@@ -228,7 +318,7 @@ let pages=[];
 let elements=[];
 
 
-/* UPDATE PREVIEW */
+/* UPDATE */
 
 function updatePreview(){
 
@@ -247,10 +337,12 @@ document.getElementById(
 ).innerText=name;
 
 document.getElementById(
-"previewHeader"
+"appHeader"
 ).style.background=color;
 
 showElements();
+
+showPagesPreview();
 
 }
 
@@ -267,7 +359,7 @@ input.value.trim();
 
 if(name===""){
 
-alert("पहले Page का नाम लिखें");
+alert("Page का नाम लिखें");
 
 return;
 
@@ -279,10 +371,12 @@ input.value="";
 
 showPages();
 
+showPagesPreview();
+
 }
 
 
-/* SHOW PAGES */
+/* SHOW PAGE LIST */
 
 function showPages(){
 
@@ -311,6 +405,62 @@ box.appendChild(div);
 }
 
 
+/* PAGE PREVIEW */
+
+function showPagesPreview(){
+
+let content=
+document.getElementById("appContent");
+
+if(pages.length===0){
+
+return;
+
+}
+
+let old=
+document.getElementById("pageNavigation");
+
+if(old){
+old.remove();
+}
+
+let nav=
+document.createElement("div");
+
+nav.id="pageNavigation";
+
+pages.forEach(function(page){
+
+let btn=
+document.createElement("button");
+
+btn.className=
+"app-page-button";
+
+btn.innerText=
+"📄 "+page;
+
+btn.onclick=function(){
+
+alert(
+"You opened: "+page
+);
+
+};
+
+nav.appendChild(btn);
+
+});
+
+content.insertBefore(
+nav,
+content.firstChild
+);
+
+}
+
+
 /* DELETE PAGE */
 
 function deletePage(index){
@@ -319,10 +469,12 @@ pages.splice(index,1);
 
 showPages();
 
+showPagesPreview();
+
 }
 
 
-/* ADD TEXT */
+/* TEXT */
 
 function addText(){
 
@@ -342,7 +494,6 @@ return;
 elements.push({
 
 type:"text",
-
 value:text
 
 });
@@ -352,13 +503,13 @@ showElements();
 }
 
 
-/* ADD BUTTON */
+/* BUTTON */
 
 function addButton(){
 
 let text=
 prompt(
-"Button पर क्या लिखा हो?",
+"Button का नाम",
 "Contact Us"
 );
 
@@ -369,10 +520,9 @@ text.trim()===""
 return;
 }
 
-
 let url=
 prompt(
-"Button दबाने पर कौन-सी website खुले?",
+"Button URL",
 "https://example.com"
 );
 
@@ -383,13 +533,10 @@ url.trim()===""
 return;
 }
 
-
 elements.push({
 
 type:"button",
-
 value:text,
-
 url:url
 
 });
@@ -399,13 +546,13 @@ showElements();
 }
 
 
-/* ADD IMAGE */
+/* IMAGE */
 
 function addImage(){
 
 let url=
 prompt(
-"Image का URL डालें",
+"Image URL",
 "https://picsum.photos/500/300"
 );
 
@@ -419,7 +566,6 @@ return;
 elements.push({
 
 type:"image",
-
 value:url
 
 });
@@ -433,104 +579,108 @@ showElements();
 
 function showElements(){
 
-let preview=
-document.getElementById("previewBody");
+let content=
+document.getElementById("appContent");
 
-let list=
-document.getElementById("elementsList");
+let old=
+document.getElementById("elementsPreview");
 
-preview.innerHTML="";
+if(old){
+old.remove();
+}
 
-list.innerHTML="";
+let wrapper=
+document.createElement("div");
+
+wrapper.id=
+"elementsPreview";
 
 
-elements.forEach(function(el,index){
-
-/* TEXT */
+elements.forEach(function(el){
 
 if(el.type==="text"){
 
 let p=
 document.createElement("p");
 
-p.innerText=el.value;
+p.innerText=
+el.value;
 
-p.style.fontSize="18px";
+p.style.fontSize=
+"17px";
 
-preview.appendChild(p);
+wrapper.appendChild(p);
 
 }
 
-
-/* BUTTON */
 
 if(el.type==="button"){
 
 let a=
 document.createElement("a");
 
-a.innerText=el.value;
+a.innerText=
+el.value;
 
-a.href=el.url;
+a.href=
+el.url;
 
-a.target="_blank";
+a.target=
+"_blank";
 
-a.className="preview-button";
+a.className=
+"preview-button";
 
 a.style.background=
 document.getElementById(
 "themeColor"
 ).value;
 
-preview.appendChild(a);
+wrapper.appendChild(a);
 
 }
 
-
-/* IMAGE */
 
 if(el.type==="image"){
 
 let img=
 document.createElement("img");
 
-img.src=el.value;
+img.src=
+el.value;
 
-img.className="preview-image";
+img.className=
+"preview-image";
 
-img.onerror=function(){
-
-img.alt="Image load नहीं हुई";
-
-};
-
-preview.appendChild(img);
+wrapper.appendChild(img);
 
 }
+
+});
+
+content.appendChild(wrapper);
 
 
 /* ELEMENT LIST */
 
+let list=
+document.getElementById("elementsList");
+
+list.innerHTML="";
+
+elements.forEach(function(el,index){
+
 let item=
 document.createElement("div");
 
-item.className="element";
-
-let extra="";
-
-if(el.type==="button"){
-
-extra=
-" → "+el.url;
-
-}
+item.className=
+"element";
 
 item.innerHTML=
 "🧩 "+
 el.type+
 " : "+
 el.value+
-extra+
 '<button class="delete" onclick="deleteElement('+
 index+
 ')">Delete</button>';
@@ -553,21 +703,17 @@ showElements();
 }
 
 
-/* SAVE APP */
+/* SAVE */
 
 function saveApp(){
 
 let app={
 
 name:
-document.getElementById(
-"appName"
-).value,
+document.getElementById("appName").value,
 
 color:
-document.getElementById(
-"themeColor"
-).value,
+document.getElementById("themeColor").value,
 
 pages:pages,
 
@@ -581,7 +727,7 @@ JSON.stringify(app)
 );
 
 alert(
-"✅ App successfully save हो गई!"
+"✅ App Save हो गई!"
 );
 
 }
@@ -636,7 +782,7 @@ app.name || "";
 document.getElementById(
 "themeColor"
 ).value=
-app.color || "#1976d2";
+app.color || "#2563eb";
 
 pages=
 app.pages || [];
@@ -645,8 +791,6 @@ elements=
 app.elements || [];
 
 showPages();
-
-showElements();
 
 updatePreview();
 
@@ -658,4 +802,4 @@ loadApp();
 </script>
 
 </body>
-  </html>
+</html>
