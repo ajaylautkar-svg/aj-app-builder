@@ -1,10 +1,168 @@
 <!DOCTYPE html>
-<html>
+<html lang="hi">
 <head>
-  <title>AJ App Builder</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AJ App Builder</title>
+
+<style>
+*{box-sizing:border-box;font-family:Arial,sans-serif}
+
+body{
+  margin:0;
+  background:#f4f7fb;
+  color:#222;
+}
+
+header{
+  background:#111827;
+  color:white;
+  padding:25px 15px;
+  text-align:center;
+}
+
+header h1{margin:0;font-size:30px}
+header p{margin:8px 0 0;color:#d1d5db}
+
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:20px;
+}
+
+.box{
+  background:white;
+  margin-top:20px;
+  padding:22px;
+  border-radius:18px;
+  box-shadow:0 4px 18px rgba(0,0,0,.08);
+}
+
+h2{margin-top:0}
+
+input,select{
+  width:100%;
+  padding:13px;
+  margin:8px 0 15px;
+  border:1px solid #ddd;
+  border-radius:10px;
+  font-size:16px;
+}
+
+button{
+  border:0;
+  border-radius:10px;
+  padding:13px 20px;
+  background:#2563eb;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+}
+
+button:hover{background:#1d4ed8}
+
+.preview{
+  border:2px dashed #bbb;
+  border-radius:15px;
+  padding:30px;
+  text-align:center;
+  margin-top:15px;
+  min-height:160px;
+}
+
+#appTitle{
+  font-size:26px;
+  font-weight:bold;
+}
+
+#appText{
+  color:#666;
+  margin:12px 0 20px;
+}
+
+footer{
+  text-align:center;
+  padding:25px;
+  color:#777;
+}
+</style>
 </head>
+
 <body>
-  <h1>🎉 AJ App Builder</h1>
-  <p>Website successfully live hai!</p>
+
+<header>
+  <h1>🚀 AJ App Builder</h1>
+  <p>अपनी खुद की App आसानी से बनाएं</p>
+</header>
+
+<div class="container">
+
+<div class="box">
+  <h2>📱 Create New App</h2>
+
+  <label>App का नाम</label>
+  <input
+    type="text"
+    id="name"
+    placeholder="जैसे My Business App"
+    oninput="updatePreview()"
+  >
+
+  <label>App का मुख्य रंग</label>
+  <select id="theme" onchange="updatePreview()">
+    <option value="#2563eb">Blue</option>
+    <option value="#16a34a">Green</option>
+    <option value="#9333ea">Purple</option>
+    <option value="#ea580c">Orange</option>
+    <option value="#dc2626">Red</option>
+  </select>
+
+  <button onclick="createApp()">Create App</button>
+</div>
+
+<div class="box">
+  <h2>👀 Live Preview</h2>
+
+  <div class="preview" id="preview">
+    <div id="appTitle">आपकी App का नाम</div>
+    <div id="appText">यहाँ आपकी App का Preview दिखाई देगा।</div>
+    <button id="previewButton">START</button>
+  </div>
+</div>
+
+</div>
+
+<footer>
+  © 2026 AJ App Builder
+</footer>
+
+<script>
+
+function updatePreview(){
+
+  let name=document.getElementById("name").value;
+  let theme=document.getElementById("theme").value;
+
+  document.getElementById("appTitle").innerText =
+    name || "आपकी App का नाम";
+
+  document.getElementById("previewButton").style.background =
+    theme;
+}
+
+function createApp(){
+
+  let name=document.getElementById("name").value;
+
+  if(name===""){
+    alert("पहले App का नाम लिखें");
+    return;
+  }
+
+  alert("🎉 आपकी App '" + name + "' तैयार होना शुरू हो गई!");
+}
+
+</script>
+
 </body>
 </html>
