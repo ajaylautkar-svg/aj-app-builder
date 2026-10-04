@@ -9,81 +9,100 @@
 *{box-sizing:border-box;font-family:Arial,sans-serif}
 
 body{
-  margin:0;
-  background:#f4f7fb;
-  color:#222;
+ margin:0;
+ background:#f4f7fb;
+ color:#222;
 }
 
 header{
-  background:#111827;
-  color:white;
-  padding:25px 15px;
-  text-align:center;
+ background:#111827;
+ color:white;
+ padding:24px 15px;
+ text-align:center;
 }
 
 header h1{margin:0;font-size:30px}
 header p{margin:8px 0 0;color:#d1d5db}
 
 .container{
-  max-width:900px;
-  margin:auto;
-  padding:20px;
+ max-width:900px;
+ margin:auto;
+ padding:18px;
 }
 
 .box{
-  background:white;
-  margin-top:20px;
-  padding:22px;
-  border-radius:18px;
-  box-shadow:0 4px 18px rgba(0,0,0,.08);
+ background:white;
+ margin-top:18px;
+ padding:20px;
+ border-radius:18px;
+ box-shadow:0 4px 18px rgba(0,0,0,.08);
 }
 
 h2{margin-top:0}
 
 input,select{
-  width:100%;
-  padding:13px;
-  margin:8px 0 15px;
-  border:1px solid #ddd;
-  border-radius:10px;
-  font-size:16px;
+ width:100%;
+ padding:13px;
+ margin:7px 0 14px;
+ border:1px solid #ddd;
+ border-radius:10px;
+ font-size:16px;
 }
 
 button{
-  border:0;
-  border-radius:10px;
-  padding:13px 20px;
-  background:#2563eb;
-  color:white;
-  font-size:16px;
-  cursor:pointer;
+ border:0;
+ border-radius:10px;
+ padding:12px 18px;
+ background:#2563eb;
+ color:white;
+ font-size:16px;
+ cursor:pointer;
+ margin:4px;
 }
 
-button:hover{background:#1d4ed8}
+.delete{
+ background:#dc2626;
+}
+
+.page{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ padding:12px;
+ margin:8px 0;
+ background:#f3f4f6;
+ border-radius:10px;
+}
 
 .preview{
-  border:2px dashed #bbb;
-  border-radius:15px;
-  padding:30px;
-  text-align:center;
-  margin-top:15px;
-  min-height:160px;
+ border:2px dashed #bbb;
+ border-radius:15px;
+ padding:25px;
+ text-align:center;
+ margin-top:15px;
+ min-height:180px;
 }
 
 #appTitle{
-  font-size:26px;
-  font-weight:bold;
+ font-size:26px;
+ font-weight:bold;
 }
 
-#appText{
-  color:#666;
-  margin:12px 0 20px;
+#pagesPreview{
+ margin-top:20px;
+}
+
+.previewPage{
+ background:#f3f4f6;
+ padding:12px;
+ margin:8px 0;
+ border-radius:10px;
 }
 
 footer{
-  text-align:center;
-  padding:25px;
-  color:#777;
+ text-align:center;
+ padding:25px;
+ color:#777;
 }
 </style>
 </head>
@@ -91,75 +110,226 @@ footer{
 <body>
 
 <header>
-  <h1>🚀 AJ App Builder</h1>
-  <p>अपनी खुद की App आसानी से बनाएं</p>
+<h1>🚀 AJ App Builder</h1>
+<p>अपनी खुद की App आसानी से बनाएं</p>
 </header>
 
 <div class="container">
 
 <div class="box">
-  <h2>📱 Create New App</h2>
 
-  <label>App का नाम</label>
-  <input
-    type="text"
-    id="name"
-    placeholder="जैसे My Business App"
-    oninput="updatePreview()"
-  >
+<h2>📱 Create New App</h2>
 
-  <label>App का मुख्य रंग</label>
-  <select id="theme" onchange="updatePreview()">
-    <option value="#2563eb">Blue</option>
-    <option value="#16a34a">Green</option>
-    <option value="#9333ea">Purple</option>
-    <option value="#ea580c">Orange</option>
-    <option value="#dc2626">Red</option>
-  </select>
+<label>App का नाम</label>
 
-  <button onclick="createApp()">Create App</button>
+<input
+ id="appName"
+ type="text"
+ placeholder="जैसे My Business App"
+ oninput="updatePreview()"
+>
+
+<label>App का रंग</label>
+
+<select id="theme" onchange="updatePreview()">
+<option value="#2563eb">Blue</option>
+<option value="#16a34a">Green</option>
+<option value="#9333ea">Purple</option>
+<option value="#ea580c">Orange</option>
+<option value="#dc2626">Red</option>
+</select>
+
 </div>
 
 <div class="box">
-  <h2>👀 Live Preview</h2>
 
-  <div class="preview" id="preview">
-    <div id="appTitle">आपकी App का नाम</div>
-    <div id="appText">यहाँ आपकी App का Preview दिखाई देगा।</div>
-    <button id="previewButton">START</button>
-  </div>
+<h2>📄 App Pages</h2>
+
+<input
+ id="pageName"
+ type="text"
+ placeholder="Page का नाम लिखें"
+>
+
+<button onclick="addPage()">➕ Add Page</button>
+
+<div id="pageList"></div>
+
+</div>
+
+<div class="box">
+
+<h2>👀 Live Preview</h2>
+
+<div class="preview" id="preview">
+
+<div id="appTitle">
+आपकी App का नाम
+</div>
+
+<p>
+आपकी App का Preview यहाँ दिखाई देगा।
+</p>
+
+<button id="previewButton">
+START
+</button>
+
+<div id="pagesPreview"></div>
+
+</div>
+
+</div>
+
+<div class="box">
+
+<h2>💾 App Settings</h2>
+
+<button onclick="saveApp()">
+💾 Save App
+</button>
+
+<button onclick="clearApp()">
+🗑️ Clear
+</button>
+
 </div>
 
 </div>
 
 <footer>
-  © 2026 AJ App Builder
+© 2026 AJ App Builder
 </footer>
+
 
 <script>
 
+let pages=[];
+
+
 function updatePreview(){
 
-  let name=document.getElementById("name").value;
-  let theme=document.getElementById("theme").value;
+ let name=document.getElementById("appName").value;
 
-  document.getElementById("appTitle").innerText =
-    name || "आपकी App का नाम";
+ let theme=document.getElementById("theme").value;
 
-  document.getElementById("previewButton").style.background =
-    theme;
+ document.getElementById("appTitle").innerText =
+ name || "आपकी App का नाम";
+
+ document.getElementById("previewButton").style.background =
+ theme;
+
 }
 
-function createApp(){
 
-  let name=document.getElementById("name").value;
+function addPage(){
 
-  if(name===""){
-    alert("पहले App का नाम लिखें");
-    return;
-  }
+ let input=document.getElementById("pageName");
 
-  alert("🎉 आपकी App '" + name + "' तैयार होना शुरू हो गई!");
+ let name=input.value.trim();
+
+ if(name===""){
+
+   alert("पहले Page का नाम लिखें");
+
+   return;
+ }
+
+ pages.push(name);
+
+ input.value="";
+
+ showPages();
+
+}
+
+
+function showPages(){
+
+ let list=document.getElementById("pageList");
+
+ let preview=document.getElementById("pagesPreview");
+
+ list.innerHTML="";
+ preview.innerHTML="";
+
+ pages.forEach(function(page,index){
+
+   list.innerHTML +=
+   `
+   <div class="page">
+   <span>📄 ${page}</span>
+
+   <button
+   class="delete"
+   onclick="deletePage(${index})">
+   Delete
+   </button>
+
+   </div>
+   `;
+
+   preview.innerHTML +=
+   `
+   <div class="previewPage">
+   📄 ${page}
+   </div>
+   `;
+
+ });
+
+}
+
+
+function deletePage(index){
+
+ pages.splice(index,1);
+
+ showPages();
+
+}
+
+
+function saveApp(){
+
+ let name=document.getElementById("appName").value;
+
+ if(name===""){
+
+   alert("पहले App का नाम लिखें");
+
+   return;
+ }
+
+ localStorage.setItem(
+   "AJ_App_Name",
+   name
+ );
+
+ localStorage.setItem(
+   "AJ_App_Pages",
+   JSON.stringify(pages)
+ );
+
+ alert("✅ App settings save हो गईं!");
+
+}
+
+
+function clearApp(){
+
+ localStorage.removeItem("AJ_App_Name");
+
+ localStorage.removeItem("AJ_App_Pages");
+
+ document.getElementById("appName").value="";
+
+ pages=[];
+
+ showPages();
+
+ updatePreview();
+
 }
 
 </script>
