@@ -602,72 +602,66 @@ showElements();
 
 
 /* SHOW ELEMENTS */
-
 function showElements(){
 
-let content=
+let content =
 document.getElementById("appContent");
 
-let old=
+let old =
 document.getElementById("elementsPreview");
 
 if(old){
 old.remove();
 }
 
-let wrapper=
+let wrapper =
 document.createElement("div");
 
-wrapper.id="elementsPreview";
-
+wrapper.id = "elementsPreview";
 
 elements.forEach(function(el){
 
-if(el.type==="text"){
+if(el.type === "text"){
 
-let p=
+let p =
 document.createElement("p");
 
-p.innerText=el.value;
+p.innerText = el.value;
 
-p.style.fontSize="17px";
+p.style.fontSize = "17px";
 
 wrapper.appendChild(p);
 
 }
 
+if(el.type === "button"){
 
-if(el.type==="button"){
-
-let a=
+let a =
 document.createElement("a");
 
-a.innerText=el.value;
+a.innerText = el.value;
 
-a.href=el.url;
+a.href = el.url;
 
-a.target="_blank";
+a.target = "_blank";
 
-a.className="preview-button";
+a.className = "preview-button";
 
-a.style.background=
-document.getElementById(
-"themeColor"
-).value;
+a.style.background =
+document.getElementById("themeColor").value;
 
 wrapper.appendChild(a);
 
 }
 
+if(el.type === "image"){
 
-if(el.type==="image"){
-
-let img=
+let img =
 document.createElement("img");
 
-img.src=el.value;
+img.src = el.value;
 
-img.className="preview-image";
+img.className = "preview-image";
 
 wrapper.appendChild(img);
 
@@ -675,8 +669,9 @@ wrapper.appendChild(img);
 
 });
 
-
 content.appendChild(wrapper);
+
+}
 
 
 /* ELEMENT LIST */
