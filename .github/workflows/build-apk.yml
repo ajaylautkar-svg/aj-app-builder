@@ -21,10 +21,7 @@ jobs:
           mkdir www
           cp index.html www/index.html
 
-      - name: Install Capacitor
-        run: |
-          npm init -y
-          npm install @capacitor/core @capacitor/cli @capacitor/android
+      npm install @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6
 
       - name: Create Android project
         run: |
@@ -32,7 +29,8 @@ jobs:
           npx cap add android
           npx cap copy android
 
-            - name: Fix Kotlin dependencies
+        - name: Fix Kotlin 
+        dependencies
         working-directory: android
         run: |
           cat >> build.gradle <<'EOF'
