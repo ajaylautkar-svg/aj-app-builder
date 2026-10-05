@@ -16,12 +16,15 @@ jobs:
         with:
           node-version: 20
 
-      - name: Prepare web files
+      - name: Prepare website
         run: |
-          mkdir www
+          mkdir -p www
           cp index.html www/index.html
 
-      npm install @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6
+      - name: Install Capacitor 6
+        run: |
+          npm init -y
+          npm install @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6
 
       - name: Create Android project
         run: |
@@ -29,26 +32,11 @@ jobs:
           npx cap add android
           npx cap copy android
 
-        - name: Fix Kotlin 
-        dependencies
-        working-directory: android
-        run: |
-          cat >> build.gradle <<'EOF'
-
-          configurations.configureEach {
-              exclude group: "org.jetbrains.kotlin", module: "kotlin-stdlib-jdk7"
-              exclude group: "org.jetbrains.kotlin", module: "kotlin-stdlib-jdk8"
-
-              resolutionStrategy {
-                  force "org.jetbrains.kotlin:kotlin-stdlib:1.8.22"
-              }
-          }
-          EOF
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 21
+          java-version: 17
 
       - name: Build APK
         working-directory: android
