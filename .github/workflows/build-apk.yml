@@ -32,6 +32,18 @@ jobs:
           npx cap add android
           npx cap copy android
 
+      - name: Fix Kotlin dependencies
+        working-directory: android
+        run: |
+          echo "" >> build.gradle
+          echo "configurations.all {" >> build.gradle
+          echo "    resolutionStrategy.eachDependency { DependencyResolveDetails details ->" >> build.gradle
+          echo "        if (details.requested.group == 'org.jetbrains.kotlin') {" >> build.gradle
+          echo "            details.useVersion '1.8.22'" >> build.gradle
+          echo "        }" >> build.gradle
+          echo "    }" >> build.gradle
+          echo "}" >> build.gradle
+
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
