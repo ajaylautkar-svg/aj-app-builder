@@ -3,13 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>AJ App Builder</title>
 
 <style>
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
   margin:0;
@@ -25,12 +22,10 @@ header{
   text-align:center;
 }
 
-header h1{
-  margin:0 0 7px;
-}
+header h1{margin:0 0 7px}
 
 .container{
-  max-width:950px;
+  max-width:1000px;
   margin:auto;
   padding:15px;
 }
@@ -43,13 +38,18 @@ header h1{
   box-shadow:0 4px 15px rgba(0,0,0,.08);
 }
 
-input,select,button{
+input,textarea,select,button{
   width:100%;
   padding:12px;
   margin:7px 0;
   border-radius:9px;
   border:1px solid #ccc;
   font-size:16px;
+}
+
+textarea{
+  min-height:90px;
+  resize:vertical;
 }
 
 button{
@@ -59,16 +59,9 @@ button{
   cursor:pointer;
 }
 
-.delete{
-  background:#dc2626;
-}
-
-.element{
-  background:#f3f4f6;
-  padding:12px;
-  margin-top:8px;
-  border-radius:9px;
-}
+.green{background:#16a34a}
+.orange{background:#ea580c}
+.red{background:#dc2626}
 
 .builder{
   display:grid;
@@ -94,8 +87,7 @@ button{
   background:white;
   border-radius:27px;
   overflow:hidden;
-  min-height:560px;
-  position:relative;
+  min-height:570px;
 }
 
 .app-header{
@@ -104,20 +96,32 @@ button{
   text-align:center;
 }
 
+.app-header img{
+  width:60px;
+  height:60px;
+  border-radius:15px;
+  object-fit:cover;
+  background:white;
+}
+
 .app-header h2{
-  margin:0;
+  margin:8px 0 0;
 }
 
 .app-content{
   padding:18px;
-  min-height:440px;
+  min-height:450px;
 }
 
-.app-page-button{
-  width:100%;
-  background:#f1f5f9;
-  color:#222;
-  margin:5px 0;
+.element{
+  background:#f3f4f6;
+  padding:12px;
+  margin-top:8px;
+  border-radius:9px;
+}
+
+.delete{
+  background:#dc2626;
 }
 
 .preview-button{
@@ -139,10 +143,13 @@ button{
   margin:8px 0;
 }
 
-.home-text{
-  color:#666;
-  text-align:center;
-  margin-bottom:20px;
+.status{
+  padding:12px;
+  background:#ecfdf5;
+  border-radius:10px;
+  margin-top:10px;
+  color:#166534;
+  display:none;
 }
 
 @media(min-width:750px){
@@ -165,13 +172,13 @@ button{
 
 <div class="builder">
 
-<!-- SETTINGS -->
-
 <div>
+
+<!-- APP INFORMATION -->
 
 <div class="card">
 
-<h2>📱 App Settings</h2>
+<h2>📱 App Information</h2>
 
 <label>App का नाम</label>
 
@@ -179,6 +186,31 @@ button{
 id="appName"
 type="text"
 placeholder="My Business App"
+oninput="updatePreview()"
+>
+
+<label>App Description</label>
+
+<textarea
+id="appDescription"
+placeholder="मेरी App के बारे में..."
+oninput="updatePreview()"
+></textarea>
+
+<label>Version</label>
+
+<input
+id="appVersion"
+type="text"
+value="1.0.0"
+>
+
+<label>Logo URL</label>
+
+<input
+id="logoUrl"
+type="text"
+placeholder="https://example.com/logo.png"
 oninput="updatePreview()"
 >
 
@@ -244,27 +276,44 @@ placeholder="Home, About, Contact..."
 </div>
 
 
-<!-- SAVE -->
+<!-- GENERATE -->
 
 <div class="card">
 
-<button onclick="saveApp()">
-💾 Save App
+<h2>🚀 Generate App</h2>
+
+<button
+class="green"
+onclick="generateApp()"
+>
+🚀 Generate App
 </button>
 
 <button
-class="delete"
+class="orange"
+onclick="downloadProject()"
+>
+📦 Download Project
+</button>
+
+<button
+class="red"
 onclick="clearApp()"
 >
 🗑️ Clear App
 </button>
 
-</div>
+<div
+id="status"
+class="status"
+></div>
 
 </div>
 
+</div>
 
-<!-- MOBILE PREVIEW -->
+
+<!-- PREVIEW -->
 
 <div>
 
@@ -281,6 +330,11 @@ class="app-header"
 id="appHeader"
 >
 
+<img
+id="previewLogo"
+style="display:none"
+>
+
 <h2 id="previewTitle">
 My App
 </h2>
@@ -292,9 +346,9 @@ class="app-content"
 id="appContent"
 >
 
-<div class="home-text">
+<p id="previewDescription">
 Welcome to your App
-</div>
+</p>
 
 </div>
 
@@ -318,31 +372,64 @@ let pages=[];
 let elements=[];
 
 
-/* UPDATE */
+/* UPDATE PREVIEW */
 
 function updatePreview(){
 
 let name=
 document.getElementById("appName").value;
 
+let description=
+document.getElementById("appDescription").value;
+
 let color=
 document.getElementById("themeColor").value;
+
+let logo=
+document.getElementById("logoUrl").value;
+
 
 if(name.trim()===""){
 name="My App";
 }
+
+if(description.trim()===""){
+description="Welcome to your App";
+}
+
 
 document.getElementById(
 "previewTitle"
 ).innerText=name;
 
 document.getElementById(
+"previewDescription"
+).innerText=description;
+
+document.getElementById(
 "appHeader"
 ).style.background=color;
 
-showElements();
 
-showPagesPreview();
+/* LOGO */
+
+let logoBox=
+document.getElementById("previewLogo");
+
+if(logo.trim()!==""){
+
+logoBox.src=logo;
+
+logoBox.style.display="block";
+
+}else{
+
+logoBox.style.display="none";
+
+}
+
+
+showElements();
 
 }
 
@@ -371,12 +458,10 @@ input.value="";
 
 showPages();
 
-showPagesPreview();
-
 }
 
 
-/* SHOW PAGE LIST */
+/* SHOW PAGES */
 
 function showPages(){
 
@@ -405,62 +490,6 @@ box.appendChild(div);
 }
 
 
-/* PAGE PREVIEW */
-
-function showPagesPreview(){
-
-let content=
-document.getElementById("appContent");
-
-if(pages.length===0){
-
-return;
-
-}
-
-let old=
-document.getElementById("pageNavigation");
-
-if(old){
-old.remove();
-}
-
-let nav=
-document.createElement("div");
-
-nav.id="pageNavigation";
-
-pages.forEach(function(page){
-
-let btn=
-document.createElement("button");
-
-btn.className=
-"app-page-button";
-
-btn.innerText=
-"📄 "+page;
-
-btn.onclick=function(){
-
-alert(
-"You opened: "+page
-);
-
-};
-
-nav.appendChild(btn);
-
-});
-
-content.insertBefore(
-nav,
-content.firstChild
-);
-
-}
-
-
 /* DELETE PAGE */
 
 function deletePage(index){
@@ -469,12 +498,10 @@ pages.splice(index,1);
 
 showPages();
 
-showPagesPreview();
-
 }
 
 
-/* TEXT */
+/* ADD TEXT */
 
 function addText(){
 
@@ -503,7 +530,7 @@ showElements();
 }
 
 
-/* BUTTON */
+/* ADD BUTTON */
 
 function addButton(){
 
@@ -546,7 +573,7 @@ showElements();
 }
 
 
-/* IMAGE */
+/* ADD IMAGE */
 
 function addImage(){
 
@@ -592,8 +619,7 @@ old.remove();
 let wrapper=
 document.createElement("div");
 
-wrapper.id=
-"elementsPreview";
+wrapper.id="elementsPreview";
 
 
 elements.forEach(function(el){
@@ -603,11 +629,9 @@ if(el.type==="text"){
 let p=
 document.createElement("p");
 
-p.innerText=
-el.value;
+p.innerText=el.value;
 
-p.style.fontSize=
-"17px";
+p.style.fontSize="17px";
 
 wrapper.appendChild(p);
 
@@ -619,17 +643,13 @@ if(el.type==="button"){
 let a=
 document.createElement("a");
 
-a.innerText=
-el.value;
+a.innerText=el.value;
 
-a.href=
-el.url;
+a.href=el.url;
 
-a.target=
-"_blank";
+a.target="_blank";
 
-a.className=
-"preview-button";
+a.className="preview-button";
 
 a.style.background=
 document.getElementById(
@@ -646,17 +666,16 @@ if(el.type==="image"){
 let img=
 document.createElement("img");
 
-img.src=
-el.value;
+img.src=el.value;
 
-img.className=
-"preview-image";
+img.className="preview-image";
 
 wrapper.appendChild(img);
 
 }
 
 });
+
 
 content.appendChild(wrapper);
 
@@ -673,8 +692,7 @@ elements.forEach(function(el,index){
 let item=
 document.createElement("div");
 
-item.className=
-"element";
+item.className="element";
 
 item.innerHTML=
 "🧩 "+
@@ -703,32 +721,140 @@ showElements();
 }
 
 
-/* SAVE */
+/* COLLECT PROJECT */
 
-function saveApp(){
+function getProject(){
 
-let app={
+return {
 
 name:
 document.getElementById("appName").value,
+
+description:
+document.getElementById("appDescription").value,
+
+version:
+document.getElementById("appVersion").value,
+
+logo:
+document.getElementById("logoUrl").value,
 
 color:
 document.getElementById("themeColor").value,
 
 pages:pages,
 
-elements:elements
+elements:elements,
+
+created:
+new Date().toISOString()
 
 };
 
+}
+
+
+/* SAVE */
+
+function saveApp(){
+
+let project=getProject();
+
 localStorage.setItem(
 "AJ_APP",
-JSON.stringify(app)
+JSON.stringify(project)
 );
 
-alert(
-"✅ App Save हो गई!"
+showStatus(
+"✅ App project save हो गया!"
 );
+
+}
+
+
+/* GENERATE */
+
+function generateApp(){
+
+let project=getProject();
+
+if(project.name.trim()===""){
+
+alert("पहले App का नाम लिखें");
+
+return;
+
+}
+
+localStorage.setItem(
+"AJ_APP",
+JSON.stringify(project)
+);
+
+showStatus(
+"🚀 App generate हो गई! अब Download Project से project file ले सकते हैं।"
+);
+
+}
+
+
+/* DOWNLOAD PROJECT */
+
+function downloadProject(){
+
+let project=getProject();
+
+let data=
+JSON.stringify(
+project,
+null,
+2
+);
+
+let blob=
+new Blob(
+[data],
+{type:"application/json"}
+);
+
+let url=
+URL.createObjectURL(blob);
+
+let a=
+document.createElement("a");
+
+a.href=url;
+
+a.download=
+(project.name || "AJ-App")
+.replace(/\s+/g,"-")+
+"-project.json";
+
+document.body.appendChild(a);
+
+a.click();
+
+a.remove();
+
+URL.revokeObjectURL(url);
+
+showStatus(
+"📦 Project file download शुरू हो गई।"
+);
+
+}
+
+
+/* STATUS */
+
+function showStatus(message){
+
+let box=
+document.getElementById("status");
+
+box.innerText=message;
+
+box.style.display="block";
 
 }
 
@@ -747,11 +873,27 @@ document.getElementById(
 "appName"
 ).value="";
 
+document.getElementById(
+"appDescription"
+).value="";
+
+document.getElementById(
+"appVersion"
+).value="1.0.0";
+
+document.getElementById(
+"logoUrl"
+).value="";
+
 showPages();
 
 showElements();
 
 updatePreview();
+
+showStatus(
+"App clear हो गई।"
+);
 
 }
 
@@ -771,6 +913,8 @@ return;
 
 }
 
+try{
+
 let app=
 JSON.parse(saved);
 
@@ -778,6 +922,21 @@ document.getElementById(
 "appName"
 ).value=
 app.name || "";
+
+document.getElementById(
+"appDescription"
+).value=
+app.description || "";
+
+document.getElementById(
+"appVersion"
+).value=
+app.version || "1.0.0";
+
+document.getElementById(
+"logoUrl"
+).value=
+app.logo || "";
 
 document.getElementById(
 "themeColor"
@@ -793,6 +952,14 @@ app.elements || [];
 showPages();
 
 updatePreview();
+
+}catch(error){
+
+console.log(error);
+
+updatePreview();
+
+}
 
 }
 
