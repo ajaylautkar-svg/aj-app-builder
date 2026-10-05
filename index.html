@@ -533,38 +533,103 @@ showElements();
 /* ADD BUTTON */
 
 function addButton(){
+function addButton(){
 
-let text=
-prompt(
+let text = prompt(
 "Button का नाम",
 "Contact Us"
 );
 
-if(
-text===null ||
-text.trim()===""
-){
+if(text === null || text.trim() === ""){
 return;
 }
 
-let url=
-prompt(
-"Button URL",
+let action = prompt(
+"Action चुनें: call / whatsapp / website",
+"whatsapp"
+);
+
+if(action === null || action.trim() === ""){
+return;
+}
+
+let value = "";
+
+if(action.toLowerCase() === "call"){
+
+value = prompt(
+"Mobile Number",
+"7415262294"
+);
+
+if(value === null || value.trim() === ""){
+return;
+}
+
+value = "tel:" + value.trim();
+
+}
+
+else if(action.toLowerCase() === "whatsapp"){
+
+let number = prompt(
+"WhatsApp Number",
+"917415262294"
+);
+
+if(number === null || number.trim() === ""){
+return;
+}
+
+let message = prompt(
+"WhatsApp Message",
+"Hello, मुझे जानकारी चाहिए"
+);
+
+if(message === null){
+return;
+}
+
+value =
+"https://wa.me/" +
+number.trim() +
+"?text=" +
+encodeURIComponent(message);
+
+}
+
+else if(action.toLowerCase() === "website"){
+
+value = prompt(
+"Website URL",
 "https://example.com"
 );
 
-if(
-url===null ||
-url.trim()===""
-){
+if(value === null || value.trim() === ""){
 return;
+}
+
+}
+
+else{
+
+alert(
+"Action केवल call, whatsapp या website हो सकती है."
+);
+
+return;
+
 }
 
 elements.push({
 
 type:"button",
+
 value:text,
-url:url
+
+url:value,
+
+action:action.toLowerCase()
 
 });
 
