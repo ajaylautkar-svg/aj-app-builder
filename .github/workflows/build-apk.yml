@@ -16,11 +16,19 @@ jobs:
         with:
           node-version: 20
 
-      - name: Create Capacitor project
+      - name: Prepare web files
+        run: |
+          mkdir www
+          cp index.html www/index.html
+
+      - name: Install Capacitor
         run: |
           npm init -y
           npm install @capacitor/core @capacitor/cli @capacitor/android
-          npx cap init "AJ App Builder" "com.aj.appbuilder" --web-dir=.
+
+      - name: Create Capacitor project
+        run: |
+          npx cap init "AJ App Builder" "com.aj.appbuilder" --web-dir=www
           npx cap add android
           npx cap copy android
 
