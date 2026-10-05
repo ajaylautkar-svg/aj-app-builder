@@ -534,95 +534,37 @@ showElements();
 
 function addButton(){
 
-let text = prompt(
+let text=
+prompt(
 "Button का नाम",
 "Contact Us"
 );
 
-if(text === null || text.trim() === ""){
+if(
+text===null ||
+text.trim()===""
+){
 return;
 }
 
-let action = prompt(
-"Action चुनें:\n\n1 = WhatsApp\n2 = Call\n3 = Website",
-"1"
-);
-
-if(action === null){
-return;
-}
-
-let value = "";
-
-if(action === "1"){
-
-let number = prompt(
-"WhatsApp Number (country code सहित)",
-"917415262294"
-);
-
-if(number === null || number.trim() === ""){
-return;
-}
-
-let message = prompt(
-"WhatsApp Message",
-"Hello, मुझे जानकारी चाहिए"
-);
-
-if(message === null){
-return;
-}
-
-value =
-"https://wa.me/" +
-number.trim() +
-"?text=" +
-encodeURIComponent(message);
-
-}
-
-else if(action === "2"){
-
-let number = prompt(
-"Mobile Number",
-"7415262294"
-);
-
-if(number === null || number.trim() === ""){
-return;
-}
-
-value = "tel:" + number.trim();
-
-}
-
-else if(action === "3"){
-
-value = prompt(
-"Website URL",
+let url=
+prompt(
+"Button URL",
 "https://example.com"
 );
 
-if(value === null || value.trim() === ""){
+if(
+url===null ||
+url.trim()===""
+){
 return;
-}
-
-}
-
-else{
-
-alert("कृपया 1, 2 या 3 में से चुनें।");
-return;
-
 }
 
 elements.push({
 
 type:"button",
 value:text,
-url:value,
-action:action
+url:url
 
 });
 
