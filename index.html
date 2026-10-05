@@ -1175,3 +1175,283 @@ getProject();
 
 
 if(
+project.name.trim() === ""
+){
+
+alert(
+"पहले App का नाम लिखें"
+);
+
+return;
+
+}
+
+
+localStorage.setItem(
+"AJ_APP",
+JSON.stringify(project)
+);
+
+
+showStatus(
+"🚀 App generate हो गई!"
+);
+
+}
+
+
+
+/* =========================
+   DOWNLOAD PROJECT
+========================= */
+
+function downloadProject(){
+
+let project =
+getProject();
+
+
+let data =
+JSON.stringify(
+project,
+null,
+2
+);
+
+
+let blob =
+new Blob(
+[data],
+{
+type:"application/json"
+}
+);
+
+
+let url =
+URL.createObjectURL(blob);
+
+
+let a =
+document.createElement("a");
+
+
+a.href =
+url;
+
+
+a.download =
+(project.name || "AJ-App")
+.replace(
+/\s+/g,
+"-"
+) +
+"-project.json";
+
+
+document.body.appendChild(a);
+
+
+a.click();
+
+
+a.remove();
+
+
+URL.revokeObjectURL(url);
+
+
+showStatus(
+"📦 Project file download शुरू हो गई।"
+);
+
+}
+
+
+
+/* =========================
+   STATUS
+========================= */
+
+function showStatus(message){
+
+let box =
+document.getElementById(
+"status"
+);
+
+
+box.innerText =
+message;
+
+
+box.style.display =
+"block";
+
+}
+
+
+
+/* =========================
+   CLEAR
+========================= */
+
+function clearApp(){
+
+if(
+!confirm(
+"क्या आप पूरी App clear करना चाहते हैं?"
+)
+){
+
+return;
+
+}
+
+
+localStorage.removeItem(
+"AJ_APP"
+);
+
+
+pages = [];
+
+elements = [];
+
+
+document.getElementById(
+"appName"
+).value = "";
+
+
+document.getElementById(
+"appDescription"
+).value = "";
+
+
+document.getElementById(
+"appVersion"
+).value = "1.0.0";
+
+
+document.getElementById(
+"logoUrl"
+).value = "";
+
+
+showPages();
+
+
+updatePreview();
+
+
+showStatus(
+"App clear हो गई।"
+);
+
+}
+
+
+
+/* =========================
+   LOAD APP
+========================= */
+
+function loadApp(){
+
+let saved =
+localStorage.getItem(
+"AJ_APP"
+);
+
+
+if(!saved){
+
+updatePreview();
+
+return;
+
+}
+
+
+try{
+
+let app =
+JSON.parse(saved);
+
+
+document.getElementById(
+"appName"
+).value =
+app.name || "";
+
+
+document.getElementById(
+"appDescription"
+).value =
+app.description || "";
+
+
+document.getElementById(
+"appVersion"
+).value =
+app.version || "1.0.0";
+
+
+document.getElementById(
+"logoUrl"
+).value =
+app.logo || "";
+
+
+document.getElementById(
+"themeColor"
+).value =
+app.color || "#2563eb";
+
+
+pages =
+Array.isArray(app.pages)
+? app.pages
+: [];
+
+
+elements =
+Array.isArray(app.elements)
+? app.elements
+: [];
+
+
+showPages();
+
+
+updatePreview();
+
+
+}
+catch(error){
+
+console.log(error);
+
+pages = [];
+
+elements = [];
+
+updatePreview();
+
+}
+
+}
+
+
+
+/* =========================
+   START
+========================= */
+
+loadApp();
+
+</script>
+
+</body>
+   </html>
